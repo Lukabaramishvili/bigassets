@@ -1,17 +1,4 @@
 
-
-// for (let i = 1; i < 100; i++) {
-//   fetch(`https://fizal.me/pokeapi/api/v2/id/${i}.json`)
-//     .then(function(r){
-//       return r.json();
-//     })
-//     .then(function(data) {
-//       document.getElementById("images").innerHTML += `
-//         <img class="target" src="${data.sprites.front_default}" alt="sprite">
-//       `;
-//     });
-// }
-
 const ITEMS_PER_PAGE = 5;
 // Index of how far we've loaded
 let idList = new Array(800);
@@ -35,27 +22,22 @@ function getBatch(items, options) {
     // page 1 -> 6-10 -> page + itemsPerPAge * 1
     // page 2 -> 11-15 -> page + itemsPerPage * 2
     // page 3 -> 16-20 -> page + itemsPerPage * 3
-    // console.log(options);
+
     const startIndex = options.start;
     const endIndex = startIndex + options.itemsPerPage;
-    // console.log(startIndex, endIndex);
     const itemsToFetch = items.slice(startIndex, endIndex);
     const urls = itemsToFetch.map(item => {
         return `https://fizal.me/pokeapi/api/v2/id/${item}.json`;
     });
-    // console.log('Fetching:');
-    // console.log(urls);
+
     // Empty promise!
     Promise.all(urls.map(url => {
-        // console.log(url);
         return fetch(url);
     }))
     .then(res => {
-        // console.log(r);
         return Promise.all(res.map(otherRes => otherRes.json()) );
     })
     .then(function(data) {
-        // console.log(data)
         renderItems(data);
     });
 }
